@@ -723,6 +723,85 @@ h3 { font-size:clamp(22px,5.5vw,28px); font-weight:900; line-height:1.2; letter-
 /* Responsive */
 @media(min-width:480px){.s{padding:64px 28px}.s--half{padding:48px 28px}}
 @media(min-width:768px){.s{max-width:560px;margin:0 auto;padding:80px 36px}}
+
+/* ═══ SQUARE / 4:5 / WIDER SCREENS ═══ */
+@media(min-width:900px){
+  .s{max-width:720px;padding:90px 48px}
+  .s--half{padding:56px 48px}
+  h2{font-size:clamp(32px,4.5vw,44px)}
+  h3{font-size:clamp(26px,3.5vw,34px)}
+  .body-text{font-size:17px}
+  .hero-stat{font-size:clamp(140px,18vw,180px);letter-spacing:-8px}
+  .hero-caption{max-width:400px;font-size:18px}
+  .q-line{max-width:440px;font-size:clamp(20px,3vw,28px)}
+  .q-sub{max-width:400px;font-size:16px}
+  .engine-sub{max-width:440px;font-size:16px}
+  .stat-grid{gap:18px}
+  .stat-card{padding:28px 20px}
+  .stat-card .n{font-size:clamp(40px,5vw,52px)}
+  .stat-card .u{font-size:14px}
+  .flow-node{max-width:300px;font-size:15px;padding:16px 28px}
+  .flow-node--engine{font-size:17px;padding:22px 36px}
+  .founder{padding:32px 28px}
+  .feat{padding:18px}
+  .feat-tx{font-size:15px}
+  .feat-tx strong{font-size:16px}
+  .radar-wrap{width:260px;height:260px}
+  .radar-ring--1{width:72px;height:72px}
+  .radar-ring--2{width:145px;height:145px}
+  .radar-ring--3{width:220px;height:220px}
+  .phone-mock{width:280px}
+  .cmp{padding:22px}
+  .cmp li{font-size:14px}
+  .case{padding:28px 24px}
+  .case-brand{font-size:22px}
+  .cs .big{font-size:clamp(30px,4vw,40px)}
+  .waitlist-card{max-width:360px}
+  .cta-sub{max-width:400px;font-size:16px}
+  .cta-btn{font-size:17px;padding:18px 40px}
+  .cta-urgency-line{max-width:400px;font-size:15px}
+  .ol-item{font-size:15px}
+  .guarantee .body-text{max-width:420px}
+  .pills{gap:12px}
+  .pill{font-size:15px;padding:10px 22px}
+  .wf-row{padding:18px 20px}
+  .wf-info .wf-val{font-size:24px}
+  .remix-graphic{height:200px}
+  .remix-source{width:80px;height:100px;font-size:26px}
+  .remix-outputs{gap:10px}
+  .remix-out{width:110px;height:42px;font-size:10px}
+  .remix-arrow-zone{left:100px;width:70px}
+  .compare{gap:14px}
+  .skyline-wrap{height:130px}
+}
+
+@media(min-width:1200px){
+  .s{max-width:860px;padding:100px 60px}
+  .s--half{padding:64px 60px}
+  h2{font-size:clamp(38px,3.5vw,50px)}
+  h3{font-size:clamp(30px,3vw,40px)}
+  .body-text{font-size:18px}
+  .hero-stat{font-size:clamp(160px,14vw,200px)}
+  .hero-caption{max-width:480px;font-size:19px}
+  .stat-grid{grid-template-columns:repeat(4,1fr);gap:16px}
+  .q-line{max-width:520px}
+  .q-sub{max-width:480px}
+  .engine-sub{max-width:520px}
+  .flow{flex-direction:row;align-items:center;gap:0}
+  .flow-arrow{width:60px;height:1px;background:linear-gradient(90deg,rgba(30,186,143,.4),rgba(30,186,143,.1))}
+  .flow-arrow::after{bottom:auto;left:auto;right:-3px;top:-3px;transform:rotate(45deg);border-right:1.5px solid var(--viridian);border-bottom:none;border-top:1.5px solid var(--viridian)}
+  .compare{flex-direction:row}
+  .cmp{flex:1}
+  .case-stats{gap:24px}
+  .cta-sub{max-width:480px}
+  .cta-urgency-line{max-width:480px}
+  .founder{padding:36px 32px}
+  .feat-stack{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .feat-stack:has(.feat:nth-child(3)){grid-template-columns:1fr 1fr 1fr}
+  .waitlist-card{max-width:420px}
+  .wl-slots{flex-direction:row;gap:10px}
+  .wl-slot{flex:1}
+}
 </style>
 </head>
 <body>
