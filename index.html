@@ -1,0 +1,1160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Huddle Duck | DM Growth Engine</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --viridian: #1EBA8F;
+  --viridian-glow: rgba(30,186,143,0.35);
+  --night: #00334B;
+  --night-deep: #001A2C;
+  --night-abyss: #000F1A;
+  --sandstorm: #F7CE46;
+  --coffee: #733C3C;
+  --coffee-light: #D47070;
+  --white: #F0F6F4;
+  --grey-light: #B0C4CC;
+  --grey-mid: #5A7A8A;
+  --grey-faint: rgba(255,255,255,0.04);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; overflow-x:hidden; }
+body {
+  font-family:'Lato',-apple-system,sans-serif;
+  background:var(--night-abyss);
+  color:var(--white);
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+  line-height:1.5;
+}
+
+/* ═══ GLOBAL ═══ */
+.s { min-height:100svh; padding:56px 22px; display:flex; flex-direction:column; justify-content:center; position:relative; overflow:hidden; }
+.s--half { min-height:auto; padding:44px 22px; }
+.s--padtop { padding-top:72px; }
+
+/* ═══ REVEAL ═══ */
+.r { opacity:0; transform:translateY(28px); transition:opacity .65s cubic-bezier(.22,1,.36,1), transform .65s cubic-bezier(.22,1,.36,1); }
+.r.v { opacity:1; transform:translateY(0); }
+.rd1{transition-delay:.12s}.rd2{transition-delay:.24s}.rd3{transition-delay:.36s}.rd4{transition-delay:.48s}.rd5{transition-delay:.6s}
+
+/* ═══ TYPOGRAPHY ═══ */
+.label { font-size:10px; text-transform:uppercase; letter-spacing:3.5px; font-weight:700; margin-bottom:18px; }
+.label--v { color:var(--viridian); }
+.label--s { color:var(--sandstorm); }
+.label--g { color:var(--grey-mid); }
+h2 { font-size:clamp(26px,7vw,36px); font-weight:900; line-height:1.12; letter-spacing:-.5px; margin-bottom:20px; }
+h3 { font-size:clamp(22px,5.5vw,28px); font-weight:900; line-height:1.2; letter-spacing:-.3px; }
+.body-text { font-size:15px; color:var(--grey-light); line-height:1.65; }
+.body-text strong { color:var(--white); font-weight:700; }
+.accent { color:var(--viridian); }
+.accent-s { color:var(--sandstorm); }
+
+/* ═══ PROGRESS DOTS ═══ */
+.dots{position:fixed;right:8px;top:50%;transform:translateY(-50%);z-index:200;display:flex;flex-direction:column;gap:6px;}
+.dots b{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.12);transition:all .35s;cursor:pointer;display:block;border:none;padding:0;}
+.dots b.on{background:var(--viridian);height:16px;border-radius:3px;}
+
+/* ══════════════════════════════════════════
+   1. HERO - 43% STAT
+   ══════════════════════════════════════════ */
+.hero { background:var(--night-abyss); text-align:center; padding-top:80px; }
+.hero::before { content:''; position:absolute; top:-20%; left:-40%; width:180%; height:140%; background:radial-gradient(ellipse at 50% 20%, rgba(30,186,143,.06) 0%, transparent 55%); pointer-events:none; }
+
+/* Animated dissolving brand visual */
+.brand-dissolve {
+  width:200px; height:120px; margin:0 auto 28px; position:relative;
+}
+.brand-dissolve .bag {
+  width:100px; height:110px; margin:0 auto; position:relative;
+}
+.brand-dissolve .bag-body {
+  width:100px; height:80px; background:rgba(255,255,255,.06); border-radius:4px 4px 8px 8px;
+  border:1px solid rgba(255,255,255,.08); position:absolute; bottom:0;
+}
+.brand-dissolve .bag-handle {
+  width:50px; height:24px; border:2px solid rgba(255,255,255,.08); border-bottom:none;
+  border-radius:25px 25px 0 0; position:absolute; top:0; left:25px;
+}
+.brand-dissolve .bag-q {
+  position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+  font-size:32px; font-weight:900; color:rgba(255,255,255,.08);
+}
+.brand-dissolve .fade-particles {
+  position:absolute; inset:0; overflow:hidden;
+}
+.brand-dissolve .fp {
+  position:absolute; width:3px; height:3px; background:var(--viridian); border-radius:50%;
+  opacity:0; animation:float-up 3s ease-in-out infinite;
+}
+.fp:nth-child(1){left:20%;bottom:20%;animation-delay:0s}
+.fp:nth-child(2){left:45%;bottom:30%;animation-delay:.5s}
+.fp:nth-child(3){left:70%;bottom:15%;animation-delay:1s}
+.fp:nth-child(4){left:35%;bottom:40%;animation-delay:1.5s}
+.fp:nth-child(5){left:60%;bottom:25%;animation-delay:2s}
+@keyframes float-up {
+  0%{opacity:0;transform:translateY(0) scale(1)}
+  30%{opacity:.6}
+  100%{opacity:0;transform:translateY(-80px) scale(0)}
+}
+
+.hero-stat {
+  font-size:clamp(110px,28vw,160px); font-weight:900; line-height:.85;
+  background:linear-gradient(180deg, var(--viridian) 0%, rgba(30,186,143,.5) 100%);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  background-clip:text; letter-spacing:-6px; position:relative;
+}
+.hero-stat sup { font-size:.45em; letter-spacing:-2px; }
+.hero-caption {
+  font-size:16px; color:var(--grey-light); max-width:280px; margin:20px auto 0; line-height:1.55;
+}
+.hero-caption strong { color:var(--white); }
+.hero-tag {
+  display:inline-block; margin-top:24px; font-size:10px; text-transform:uppercase;
+  letter-spacing:2.5px; color:var(--grey-mid); padding:6px 14px;
+  border:1px solid rgba(255,255,255,.06); border-radius:100px;
+}
+.scroll-cue {
+  position:absolute; bottom:20px; left:50%; transform:translateX(-50%);
+  display:flex; flex-direction:column; align-items:center; gap:4px;
+  opacity:.3; animation:bob 2.5s ease infinite;
+}
+.scroll-cue span { font-size:9px; text-transform:uppercase; letter-spacing:2.5px; }
+.scroll-cue i { display:block; width:1px; height:24px; background:linear-gradient(180deg,transparent,var(--white)); }
+@keyframes bob { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(5px)} }
+
+/* ══════════════════════════════════════════
+   2. AGGREGATOR TAX - REVENUE VISUAL
+   ══════════════════════════════════════════ */
+.tax { background:linear-gradient(180deg,var(--night-deep),var(--night)); }
+
+/* Animated revenue waterfall */
+.waterfall { margin:24px 0; position:relative; }
+.wf-row {
+  display:flex; align-items:center; gap:10px; margin-bottom:12px;
+  padding:14px 16px; border-radius:12px; position:relative; overflow:hidden;
+}
+.wf-row--rev {
+  background:rgba(30,186,143,.08); border:1px solid rgba(30,186,143,.15);
+}
+.wf-row--lost {
+  background:rgba(115,60,60,.12); border:1px solid rgba(115,60,60,.2);
+}
+.wf-row--keep {
+  background:rgba(30,186,143,.04); border:1px solid rgba(30,186,143,.08);
+}
+.wf-icon { font-size:20px; flex-shrink:0; }
+.wf-info { flex:1; }
+.wf-info .wf-label { font-size:12px; color:var(--grey-mid); text-transform:uppercase; letter-spacing:1px; font-weight:700; margin-bottom:2px; }
+.wf-info .wf-val { font-size:20px; font-weight:900; }
+.wf-row--rev .wf-val { color:var(--viridian); }
+.wf-row--lost .wf-val { color:var(--coffee-light); }
+.wf-row--keep .wf-val { color:var(--grey-light); }
+
+/* Animated bar */
+.wf-bar-wrap { height:8px; background:rgba(0,0,0,.3); border-radius:4px; margin-top:6px; overflow:hidden; }
+.wf-bar-fill { height:100%; border-radius:4px; transition:width 1.5s cubic-bezier(.22,1,.36,1); width:0; }
+.wf-bar-fill--full { background:var(--viridian); }
+.wf-bar-fill--lost { background:var(--coffee-light); }
+.wf-bar-fill--keep { background:var(--grey-mid); }
+.v .wf-bar-fill--full { width:100%; }
+.v .wf-bar-fill--lost { width:37%; }
+.v .wf-bar-fill--keep { width:63%; }
+
+/* Paper bag graphic */
+.paperbag-card {
+  background:rgba(0,0,0,.2); border-radius:16px; padding:24px 20px;
+  margin-top:20px; border:1px solid rgba(247,206,70,.08);
+  display:flex; gap:16px; align-items:flex-start;
+}
+.paperbag-svg { flex-shrink:0; }
+.paperbag-text { flex:1; }
+.paperbag-text .qt {
+  font-size:15px; font-style:italic; color:var(--sandstorm); line-height:1.55; margin-bottom:8px;
+}
+.paperbag-text cite {
+  font-size:11px; font-style:normal; color:var(--grey-mid);
+  text-transform:uppercase; letter-spacing:1.5px;
+}
+
+/* ══════════════════════════════════════════
+   3. MARKET STATS - DUBAI SKYLINE
+   ══════════════════════════════════════════ */
+.market { background:var(--night-deep); }
+
+/* SVG skyline */
+.skyline-wrap { position:relative; margin:0 -22px 28px; height:100px; overflow:hidden; }
+.skyline-glow {
+  position:absolute; bottom:0; left:0; right:0; height:60px;
+  background:linear-gradient(0deg, rgba(30,186,143,.06), transparent);
+}
+
+.stat-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.stat-card {
+  background:rgba(0,51,75,.35); border:1px solid rgba(30,186,143,.1);
+  border-radius:14px; padding:20px 14px; text-align:center; position:relative; overflow:hidden;
+}
+.stat-card::after {
+  content:''; position:absolute; top:0; left:20%; right:20%; height:1px;
+  background:linear-gradient(90deg,transparent,var(--viridian),transparent); opacity:.4;
+}
+.stat-card .n { font-size:clamp(34px,9vw,46px); font-weight:900; color:var(--viridian); line-height:1; letter-spacing:-1px; }
+.stat-card .u { font-size:12px; color:var(--grey-light); margin-top:5px; line-height:1.3; }
+.stat-card--warn { background:rgba(115,60,60,.12); border-color:rgba(115,60,60,.2); }
+.stat-card--warn::after { background:linear-gradient(90deg,transparent,var(--coffee),transparent); }
+.stat-card--warn .n { color:var(--coffee-light); }
+
+/* ══════════════════════════════════════════
+   4. THE QUESTION (full screen typography)
+   ══════════════════════════════════════════ */
+.question { background:var(--night); text-align:center; }
+.q-line {
+  font-size:clamp(18px,4.5vw,24px); font-weight:300; color:var(--grey-light); line-height:1.5;
+  max-width:300px; margin:0 auto;
+}
+.q-big {
+  display:block; font-size:clamp(28px,7vw,38px); font-weight:900;
+  color:var(--white); margin-top:14px; line-height:1.15; letter-spacing:-.5px;
+}
+.divider { width:40px; height:3px; background:var(--viridian); margin:24px auto; border-radius:2px; }
+.q-sub { font-size:14px; color:var(--grey-mid); line-height:1.6; max-width:280px; margin:0 auto; }
+.q-sub em { color:var(--sandstorm); font-style:normal; font-weight:700; }
+
+/* ══════════════════════════════════════════
+   5. SOLUTION + FOUNDER
+   ══════════════════════════════════════════ */
+.solution { background:linear-gradient(180deg,var(--night-deep),var(--night)); }
+
+.founder {
+  background:rgba(0,0,0,.25); border-radius:18px; padding:24px 20px;
+  border:1px solid rgba(30,186,143,.12); margin-top:24px; position:relative; overflow:hidden;
+}
+.founder::before {
+  content:''; position:absolute; top:-30px; right:-30px; width:100px; height:100px;
+  background:radial-gradient(circle,rgba(30,186,143,.1),transparent 70%);
+}
+.founder-top { display:flex; align-items:center; gap:14px; margin-bottom:16px; }
+.founder-av {
+  width:54px; height:54px; border-radius:50%;
+  background:linear-gradient(135deg,var(--viridian),var(--night));
+  display:flex; align-items:center; justify-content:center;
+  font-size:20px; font-weight:900; border:2px solid rgba(30,186,143,.25);
+}
+.founder-meta .fn { font-size:18px; font-weight:900; }
+.founder-meta .fr { font-size:11px; color:var(--viridian); font-weight:700; text-transform:uppercase; letter-spacing:1.5px; margin-top:2px; }
+
+.cred-list { display:flex; flex-direction:column; gap:7px; }
+.cred-item {
+  display:flex; align-items:center; gap:9px; font-size:13px; color:var(--grey-light);
+}
+.cred-item::before {
+  content:''; width:5px; height:5px; border-radius:50%;
+  background:var(--viridian); flex-shrink:0;
+}
+
+/* ══════════════════════════════════════════
+   6. DM GROWTH ENGINE TITLE + FLOW
+   ══════════════════════════════════════════ */
+.engine { background:var(--night-abyss); text-align:center; }
+.engine-badge {
+  display:inline-flex; align-items:center; gap:7px;
+  background:rgba(30,186,143,.08); border:1px solid rgba(30,186,143,.15);
+  border-radius:100px; padding:7px 16px; font-size:10px; font-weight:700;
+  text-transform:uppercase; letter-spacing:2px; color:var(--viridian); margin-bottom:20px;
+}
+.engine h2 span { color:var(--viridian); }
+.engine-sub {
+  font-size:14px; color:var(--grey-light); line-height:1.6;
+  max-width:300px; margin:0 auto 36px;
+}
+
+/* Animated flow graphic */
+.flow { display:flex; flex-direction:column; align-items:center; gap:0; }
+.flow-node {
+  padding:12px 22px; border-radius:12px; font-size:13px; font-weight:700;
+  text-align:center; position:relative; max-width:220px;
+}
+.flow-node--content {
+  background:rgba(247,206,70,.08); border:1px solid rgba(247,206,70,.15); color:var(--sandstorm);
+}
+.flow-node--engine {
+  background:rgba(30,186,143,.1); border:1px solid rgba(30,186,143,.25); color:var(--viridian);
+  padding:18px 28px; font-size:15px;
+  box-shadow:0 0 40px rgba(30,186,143,.15);
+}
+.flow-node--output {
+  background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.08); color:var(--white);
+}
+.flow-arrow {
+  width:1px; height:28px; position:relative;
+  background:linear-gradient(180deg, rgba(30,186,143,.4), rgba(30,186,143,.1));
+}
+.flow-arrow::after {
+  content:''; position:absolute; bottom:-3px; left:-3px;
+  width:7px; height:7px; border-right:1.5px solid var(--viridian);
+  border-bottom:1.5px solid var(--viridian); transform:rotate(45deg);
+}
+
+/* Pulsing glow ring around engine node */
+.flow-node--engine::before {
+  content:''; position:absolute; inset:-6px; border-radius:18px;
+  border:1px solid rgba(30,186,143,.15);
+  animation:engine-pulse 2.5s ease infinite;
+}
+@keyframes engine-pulse {
+  0%,100%{opacity:.3;transform:scale(1)} 50%{opacity:.8;transform:scale(1.03)}
+}
+
+/* ══════════════════════════════════════════
+   7. PILLAR 1 - FRANKENSTEIN CREATIVE
+   ══════════════════════════════════════════ */
+.pillar { background:var(--night); position:relative; }
+.pillar::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:3px;
+  background:var(--viridian);
+}
+.pillar-num-bg {
+  position:absolute; top:10px; right:16px;
+  font-size:80px; font-weight:900; color:rgba(30,186,143,.05); line-height:1;
+}
+.pillar-icon {
+  width:50px; height:50px; border-radius:12px; display:flex;
+  align-items:center; justify-content:center; margin-bottom:16px; font-size:24px;
+}
+.pi--1 { background:rgba(247,206,70,.1); }
+.pi--2 { background:rgba(30,186,143,.1); }
+.pi--3 { background:rgba(115,60,60,.15); }
+
+/* Content remix graphic for Pillar 1 */
+.remix-graphic {
+  margin:24px 0; position:relative; height:160px; overflow:hidden;
+}
+.remix-source {
+  position:absolute; left:8px; top:50%; transform:translateY(-50%);
+  width:60px; height:80px; background:rgba(255,255,255,.06);
+  border-radius:8px; border:1px solid rgba(255,255,255,.08);
+  display:flex; align-items:center; justify-content:center; font-size:20px;
+}
+.remix-arrow-zone {
+  position:absolute; left:80px; top:0; bottom:0; width:60px;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+}
+.remix-arrow-line {
+  width:40px; height:1px; background:rgba(30,186,143,.3); position:relative;
+}
+.remix-arrow-line::after {
+  content:''; position:absolute; right:-3px; top:-3px;
+  width:6px; height:6px; border-right:1.5px solid var(--viridian);
+  border-top:1.5px solid var(--viridian); transform:rotate(45deg);
+}
+.remix-outputs {
+  position:absolute; right:8px; top:50%; transform:translateY(-50%);
+  display:flex; flex-direction:column; gap:8px;
+}
+.remix-out {
+  width:90px; height:36px; border-radius:6px; display:flex;
+  align-items:center; justify-content:center; font-size:9px;
+  font-weight:700; text-transform:uppercase; letter-spacing:1px;
+  animation:remix-fade 3s ease infinite;
+}
+.remix-out:nth-child(1) { background:rgba(30,186,143,.12); color:var(--viridian); border:1px solid rgba(30,186,143,.2); animation-delay:0s; }
+.remix-out:nth-child(2) { background:rgba(247,206,70,.08); color:var(--sandstorm); border:1px solid rgba(247,206,70,.12); animation-delay:.5s; }
+.remix-out:nth-child(3) { background:rgba(115,60,60,.1); color:var(--coffee-light); border:1px solid rgba(115,60,60,.15); animation-delay:1s; }
+.remix-out:nth-child(4) { background:rgba(255,255,255,.04); color:var(--grey-light); border:1px solid rgba(255,255,255,.06); animation-delay:1.5s; }
+@keyframes remix-fade {
+  0%,100%{opacity:.5;transform:translateX(0)} 50%{opacity:1;transform:translateX(-3px)}
+}
+
+.feat-stack { display:flex; flex-direction:column; gap:10px; }
+.feat {
+  display:flex; align-items:center; gap:11px; background:rgba(0,0,0,.18);
+  border-radius:11px; padding:14px; border:1px solid var(--grey-faint);
+}
+.feat-ic {
+  width:32px; height:32px; border-radius:8px; background:rgba(30,186,143,.08);
+  display:flex; align-items:center; justify-content:center; font-size:14px; flex-shrink:0;
+}
+.feat-tx { font-size:13px; color:var(--grey-light); line-height:1.4; }
+.feat-tx strong { color:var(--white); display:block; margin-bottom:1px; font-size:14px; }
+
+/* ══════════════════════════════════════════
+   8. PILLAR 2 - PAID TRAFFIC (RADAR)
+   ══════════════════════════════════════════ */
+.radar-wrap {
+  margin:24px auto; width:200px; height:200px; position:relative;
+}
+.radar-ring {
+  position:absolute; border-radius:50%; border:1px solid rgba(30,186,143,.12);
+  top:50%; left:50%; transform:translate(-50%,-50%);
+  animation:ring-breathe 3s ease infinite;
+}
+.radar-ring--1 { width:56px; height:56px; background:rgba(30,186,143,.12); border-color:rgba(30,186,143,.3); animation-delay:0s; }
+.radar-ring--2 { width:110px; height:110px; animation-delay:.4s; }
+.radar-ring--3 { width:165px; height:165px; animation-delay:.8s; }
+.radar-center {
+  position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+  width:20px; height:20px; background:var(--viridian); border-radius:50%;
+  box-shadow:0 0 24px var(--viridian-glow); z-index:2;
+}
+/* Tiny person dots */
+.radar-dot {
+  position:absolute; width:6px; height:6px; border-radius:50%;
+  background:var(--sandstorm); opacity:.7; z-index:3;
+  animation:dot-blink 2s ease infinite;
+}
+.radar-dot:nth-child(5){top:28%;left:62%;animation-delay:0s}
+.radar-dot:nth-child(6){top:60%;left:22%;animation-delay:.6s}
+.radar-dot:nth-child(7){top:72%;left:70%;animation-delay:1.2s}
+.radar-dot:nth-child(8){top:18%;left:38%;animation-delay:.3s}
+@keyframes ring-breathe { 0%,100%{opacity:.4;transform:translate(-50%,-50%) scale(1)} 50%{opacity:.8;transform:translate(-50%,-50%) scale(1.04)} }
+@keyframes dot-blink { 0%,100%{opacity:.4;transform:scale(1)} 50%{opacity:1;transform:scale(1.5)} }
+
+.radar-label {
+  text-align:center; margin-top:12px; font-size:11px;
+  text-transform:uppercase; letter-spacing:2px; color:var(--grey-mid);
+}
+
+/* ══════════════════════════════════════════
+   9. PILLAR 3 - DM PHONE MOCKUP
+   ══════════════════════════════════════════ */
+.phone-mock {
+  margin:24px auto; width:220px; position:relative;
+}
+.phone-frame {
+  background:rgba(0,0,0,.5); border-radius:28px; padding:12px 10px;
+  border:2px solid rgba(255,255,255,.08); position:relative;
+}
+.phone-notch {
+  width:60px; height:6px; background:rgba(255,255,255,.06); border-radius:3px;
+  margin:0 auto 14px;
+}
+.phone-header {
+  display:flex; align-items:center; gap:8px; padding:0 6px; margin-bottom:14px;
+}
+.phone-header-av {
+  width:28px; height:28px; border-radius:50%; background:var(--viridian);
+  display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:900;
+}
+.phone-header-name { font-size:13px; font-weight:700; }
+.phone-header-sub { font-size:10px; color:var(--grey-mid); }
+
+.dm-msgs { display:flex; flex-direction:column; gap:8px; padding:0 4px; }
+.dm-msg {
+  max-width:80%; padding:10px 13px; border-radius:14px; font-size:12px; line-height:1.45;
+  animation:dm-slide .5s ease backwards;
+}
+.dm-msg--them {
+  background:rgba(255,255,255,.06); align-self:flex-start;
+  border-bottom-left-radius:4px; color:var(--grey-light);
+}
+.dm-msg--you {
+  background:var(--viridian); color:var(--night-deep); align-self:flex-end;
+  border-bottom-right-radius:4px; font-weight:600;
+}
+.dm-msg:nth-child(1){animation-delay:.2s}
+.dm-msg:nth-child(2){animation-delay:.6s}
+.dm-msg:nth-child(3){animation-delay:1s}
+.dm-msg:nth-child(4){animation-delay:1.4s}
+@keyframes dm-slide { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+
+.phone-input {
+  margin-top:12px; display:flex; gap:6px; padding:0 4px;
+}
+.phone-input-field {
+  flex:1; height:32px; background:rgba(255,255,255,.04); border-radius:16px;
+  border:1px solid rgba(255,255,255,.06); padding:0 12px; font-size:10px; color:var(--grey-mid);
+  display:flex; align-items:center;
+}
+.phone-input-send {
+  width:32px; height:32px; border-radius:50%; background:var(--viridian);
+  display:flex; align-items:center; justify-content:center; font-size:12px;
+}
+
+/* Aggregator vs DM comparison */
+.compare { display:flex; flex-direction:column; gap:10px; margin-top:24px; }
+.cmp {
+  border-radius:12px; padding:16px;
+}
+.cmp--bad { background:rgba(115,60,60,.1); border:1px solid rgba(115,60,60,.2); }
+.cmp--good { background:rgba(30,186,143,.06); border:1px solid rgba(30,186,143,.15); }
+.cmp-label {
+  font-size:10px; text-transform:uppercase; letter-spacing:2px; font-weight:700;
+  margin-bottom:10px;
+}
+.cmp--bad .cmp-label { color:var(--coffee-light); }
+.cmp--good .cmp-label { color:var(--viridian); }
+.cmp ul { list-style:none; display:flex; flex-direction:column; gap:5px; }
+.cmp li {
+  font-size:12px; color:var(--grey-light); padding-left:16px; position:relative; line-height:1.4;
+}
+.cmp li::before {
+  content:''; position:absolute; left:0; top:5px;
+  width:6px; height:6px; border-radius:50%;
+}
+.cmp--bad li::before { background:var(--coffee-light); }
+.cmp--good li::before { background:var(--viridian); }
+
+/* ══════════════════════════════════════════
+   10. PROOF / RESULTS
+   ══════════════════════════════════════════ */
+.proof { background:var(--night-deep); }
+.cases { display:flex; flex-direction:column; gap:14px; }
+.case {
+  background:rgba(0,51,75,.3); border-radius:16px; padding:20px 18px;
+  border:1px solid rgba(255,255,255,.05); position:relative; overflow:hidden;
+}
+.case::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:3px;
+}
+.case--uae::before{background:var(--sandstorm)}
+.case--sk::before{background:var(--viridian)}
+.case--dc::before{background:#FF6B6B}
+.case--bs::before{background:#7B68EE}
+.case--cg::before{background:#4ECDC4}
+
+.case-tag {
+  font-size:10px; text-transform:uppercase; letter-spacing:2px; font-weight:700; margin-bottom:8px;
+}
+.case--uae .case-tag{color:var(--sandstorm)}
+.case--sk .case-tag{color:var(--viridian)}
+.case--dc .case-tag{color:#FF6B6B}
+.case--bs .case-tag{color:#7B68EE}
+.case--cg .case-tag{color:#4ECDC4}
+
+.case-brand { font-size:18px; font-weight:900; margin-bottom:12px; }
+.case-stats { display:flex; gap:14px; flex-wrap:wrap; }
+.cs { flex:1; min-width:80px; }
+.cs .big {
+  font-size:clamp(26px,7vw,34px); font-weight:900; line-height:1; letter-spacing:-1px;
+}
+.case--uae .big{color:var(--sandstorm)}
+.case--sk .big{color:var(--viridian)}
+.case--dc .big{color:#FF6B6B}
+.case--bs .big{color:#7B68EE}
+.case--cg .big{color:#4ECDC4}
+.cs .sm { font-size:10px; color:var(--grey-mid); text-transform:uppercase; letter-spacing:.5px; margin-top:3px; }
+.case-note {
+  font-size:12px; color:var(--grey-light); margin-top:12px; padding-top:12px;
+  border-top:1px solid rgba(255,255,255,.05); line-height:1.45;
+}
+
+/* ══════════════════════════════════════════
+   11. OUTCOMES BANNER
+   ══════════════════════════════════════════ */
+.outcomes {
+  background:var(--viridian); text-align:center;
+}
+.outcomes h3 { color:var(--night-deep); margin-bottom:20px; }
+.pills { display:flex; justify-content:center; gap:8px; flex-wrap:wrap; }
+.pill {
+  background:rgba(0,30,45,.18); border-radius:100px; padding:8px 16px;
+  font-size:13px; font-weight:700; color:var(--night-deep);
+}
+
+/* ══════════════════════════════════════════
+   12. OFFER / PRICE
+   ══════════════════════════════════════════ */
+.offer { background:var(--night); }
+
+.offer-list { display:flex; flex-direction:column; gap:8px; margin-bottom:28px; }
+.ol-item {
+  display:flex; align-items:flex-start; gap:10px; font-size:13px; color:var(--grey-light); line-height:1.4;
+}
+.ol-chk {
+  width:18px; height:18px; border-radius:5px; background:rgba(30,186,143,.12);
+  display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  color:var(--viridian); font-size:10px; font-weight:900; margin-top:1px;
+}
+
+/* (price card removed) */
+
+/* ══════════════════════════════════════════
+   13. GUARANTEE
+   ══════════════════════════════════════════ */
+.guarantee { background:var(--night-deep); text-align:center; }
+
+.shield {
+  width:80px; height:90px; margin:0 auto 20px; position:relative;
+}
+.shield-outer {
+  width:80px; height:90px;
+  background:linear-gradient(180deg,var(--sandstorm),#D4A820);
+  clip-path:polygon(50% 0%,100% 14%,100% 68%,50% 100%,0% 68%,0% 14%);
+  display:flex; align-items:center; justify-content:center;
+}
+.shield-inner {
+  width:66px; height:74px;
+  background:var(--night-deep);
+  clip-path:polygon(50% 0%,100% 14%,100% 68%,50% 100%,0% 68%,0% 14%);
+  display:flex; align-items:center; justify-content:center;
+}
+.shield-text { font-size:18px; font-weight:900; color:var(--sandstorm); line-height:1; text-align:center; }
+.shield-text span { font-size:10px; display:block; letter-spacing:1px; }
+
+.guarantee h3 em { font-style:normal; color:var(--sandstorm); }
+.guarantee .body-text { max-width:300px; margin:12px auto 0; }
+
+/* ══════════════════════════════════════════
+   14. OBJECTIONS
+   ══════════════════════════════════════════ */
+.objections { background:var(--night); }
+.obj-stack { display:flex; flex-direction:column; gap:12px; }
+.obj-card {}
+.obj-q {
+  background:rgba(0,0,0,.2); padding:14px 16px; font-size:13px; font-weight:700;
+  color:var(--white); display:flex; align-items:center; gap:10px; cursor:pointer;
+  border:1px solid rgba(255,255,255,.05); border-radius:12px; transition:border-color .3s;
+  line-height:1.35;
+}
+.obj-q::before {
+  content:'?'; width:22px; height:22px; border-radius:50%;
+  background:rgba(247,206,70,.1); color:var(--sandstorm);
+  display:flex; align-items:center; justify-content:center;
+  font-size:12px; font-weight:900; flex-shrink:0;
+}
+.obj-q.on { border-radius:12px 12px 0 0; border-color:rgba(30,186,143,.15); }
+.obj-a {
+  background:rgba(0,0,0,.12); padding:0 16px; max-height:0; overflow:hidden;
+  transition:all .35s ease; border:1px solid transparent; border-top:0;
+}
+.obj-a.on {
+  padding:14px 16px; max-height:250px;
+  border-color:rgba(30,186,143,.15); border-radius:0 0 12px 12px;
+}
+.obj-a p { font-size:13px; color:var(--grey-light); line-height:1.6; }
+
+/* ══════════════════════════════════════════
+   15. CTA
+   ══════════════════════════════════════════ */
+.cta { background:linear-gradient(180deg,var(--night-deep),var(--night-abyss)); text-align:center; position:relative; }
+.cta::before {
+  content:''; position:absolute; bottom:0; left:0; right:0; height:50%;
+  background:radial-gradient(ellipse at 50% 100%,rgba(30,186,143,.08),transparent 60%);
+  pointer-events:none;
+}
+.cta h2 span { color:var(--viridian); }
+
+/* Capacity badge */
+.cta-capacity {
+  display:inline-flex; align-items:center; gap:8px;
+  background:rgba(247,206,70,.06); border:1px solid rgba(247,206,70,.12);
+  border-radius:100px; padding:8px 18px; font-size:11px; font-weight:700;
+  color:var(--sandstorm); text-transform:uppercase; letter-spacing:1.5px;
+  margin-bottom:20px;
+}
+.cap-dot {
+  width:7px; height:7px; border-radius:50%; background:var(--sandstorm);
+  animation:cap-pulse 1.5s ease infinite;
+}
+@keyframes cap-pulse { 0%,100%{opacity:.4;transform:scale(1)} 50%{opacity:1;transform:scale(1.3)} }
+
+/* Waitlist card */
+.waitlist-card {
+  background:rgba(0,0,0,.25); border:1px solid rgba(30,186,143,.12);
+  border-radius:16px; padding:20px 18px; margin:24px auto; max-width:280px;
+}
+.wl-slots { display:flex; flex-direction:column; gap:8px; }
+.wl-slot {
+  display:flex; align-items:center; gap:10px;
+  padding:10px 14px; border-radius:10px; font-size:12px; font-weight:700;
+  letter-spacing:.5px;
+}
+.wl-slot--filled {
+  background:rgba(90,122,138,.08); border:1px solid rgba(90,122,138,.1);
+  color:var(--grey-mid); text-decoration:line-through; text-decoration-color:rgba(90,122,138,.3);
+}
+.wl-slot--filled span { color:var(--grey-mid); font-size:8px; }
+.wl-slot--open {
+  background:rgba(30,186,143,.06); border:1px solid rgba(30,186,143,.2);
+  color:var(--viridian);
+  animation:slot-glow 2.5s ease infinite;
+}
+.wl-slot--open span { font-size:10px; }
+@keyframes slot-glow { 0%,100%{box-shadow:none} 50%{box-shadow:0 0 16px rgba(30,186,143,.15)} }
+.wl-note {
+  font-size:11px; color:var(--grey-mid); text-align:center;
+  margin-top:12px; line-height:1.4;
+}
+
+.cta-sub {
+  font-size:14px; color:var(--grey-light); line-height:1.6;
+  max-width:280px; margin:0 auto 28px;
+}
+.cta-btn {
+  display:inline-flex; align-items:center; gap:10px;
+  background:var(--viridian); color:var(--night-deep);
+  font-size:15px; font-weight:900; text-transform:uppercase; letter-spacing:1.5px;
+  padding:16px 32px; border-radius:14px; text-decoration:none; border:none; cursor:pointer;
+  box-shadow:0 4px 28px rgba(30,186,143,.3); transition:all .3s;
+  position:relative; z-index:2;
+}
+.cta-btn:hover { transform:translateY(-2px); box-shadow:0 8px 36px rgba(30,186,143,.4); }
+.cta-urg {
+  font-size:11px; color:var(--grey-mid); margin:16px auto 20px;
+  max-width:260px; line-height:1.5;
+}
+.cta-speed {
+  display:inline-flex; align-items:center; gap:7px;
+  background:rgba(247,206,70,.06); border:1px solid rgba(247,206,70,.12);
+  border-radius:100px; padding:8px 18px; font-size:12px; font-weight:700;
+  color:var(--sandstorm); margin-bottom:20px;
+}
+.cta-urgency-line {
+  font-size:13px; color:var(--grey-light); line-height:1.6;
+  max-width:280px; margin:0 auto 24px;
+}
+.cta-yalla {
+  font-size:22px; font-weight:300; color:var(--grey-mid); font-style:italic;
+}
+
+/* Footer */
+.foot {
+  background:var(--night-abyss); padding:28px 22px; text-align:center;
+  border-top:1px solid rgba(255,255,255,.03);
+}
+.foot-name { font-size:13px; font-weight:900; color:var(--viridian); letter-spacing:2px; text-transform:uppercase; margin-bottom:4px; }
+.foot-sub { font-size:10px; color:var(--grey-mid); letter-spacing:.5px; }
+
+/* Responsive */
+@media(min-width:480px){.s{padding:64px 28px}.s--half{padding:48px 28px}}
+@media(min-width:768px){.s{max-width:560px;margin:0 auto;padding:80px 36px}}
+</style>
+</head>
+<body>
+
+<!-- DOTS -->
+<nav class="dots" id="dots"></nav>
+
+<!-- ═══════════ 1. HERO ═══════════ -->
+<section class="s hero" data-s>
+  <div class="brand-dissolve r">
+    <div class="bag">
+      <div class="bag-handle"></div>
+      <div class="bag-body">
+        <span class="bag-q">?</span>
+      </div>
+      <div class="fade-particles">
+        <span class="fp"></span><span class="fp"></span><span class="fp"></span>
+        <span class="fp"></span><span class="fp"></span>
+      </div>
+    </div>
+  </div>
+  <div class="hero-stat r rd1">43<sup>%</sup></div>
+  <p class="hero-caption r rd2">of customers <strong>can't remember the name</strong> of the restaurant they just ordered from through a delivery app.</p>
+  <span class="hero-tag r rd3">You're building someone else's brand</span>
+  <div class="scroll-cue"><span>Scroll</span><i></i></div>
+</section>
+
+<!-- ═══════════ 2. AGGREGATOR TAX ═══════════ -->
+<section class="s tax" data-s>
+  <p class="label label--s r">The problem</p>
+  <h2 class="r rd1">Every delivery order costs you <span class="accent-s">30-40%</span> in commission.</h2>
+
+  <div class="waterfall r rd2">
+    <div class="wf-row wf-row--rev">
+      <span class="wf-icon">💰</span>
+      <div class="wf-info">
+        <div class="wf-label">Your delivery revenue</div>
+        <div class="wf-val">100%</div>
+        <div class="wf-bar-wrap"><div class="wf-bar-fill wf-bar-fill--full"></div></div>
+      </div>
+    </div>
+    <div class="wf-row wf-row--lost">
+      <span class="wf-icon">🔻</span>
+      <div class="wf-info">
+        <div class="wf-label">Lost to aggregator</div>
+        <div class="wf-val">30-40%</div>
+        <div class="wf-bar-wrap"><div class="wf-bar-fill wf-bar-fill--lost"></div></div>
+      </div>
+    </div>
+    <div class="wf-row wf-row--keep">
+      <span class="wf-icon">📉</span>
+      <div class="wf-info">
+        <div class="wf-label">What you keep</div>
+        <div class="wf-val">60-70%</div>
+        <div class="wf-bar-wrap"><div class="wf-bar-fill wf-bar-fill--keep"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="paperbag-card r rd3">
+    <svg class="paperbag-svg" width="48" height="56" viewBox="0 0 48 56" fill="none">
+      <rect x="4" y="16" width="40" height="36" rx="3" stroke="rgba(247,206,70,0.3)" stroke-width="1.5" fill="rgba(247,206,70,0.04)"/>
+      <path d="M14 16V10C14 6.69 17.13 4 21 4H27C30.87 4 34 6.69 34 10V16" stroke="rgba(247,206,70,0.3)" stroke-width="1.5" fill="none"/>
+      <text x="24" y="38" text-anchor="middle" fill="rgba(247,206,70,0.15)" font-size="18" font-weight="900">?</text>
+    </svg>
+    <div class="paperbag-text">
+      <p class="qt">"You're surviving in the age of the paper bag."</p>
+      <cite>Samer Hamadeh</cite>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 3. MARKET STATS ═══════════ -->
+<section class="s market" data-s>
+  <p class="label label--v r">The market</p>
+  <h2 class="r rd1">Dubai doesn't wait.</h2>
+
+  <!-- SVG skyline -->
+  <div class="skyline-wrap r rd2">
+    <svg width="100%" height="100" viewBox="0 0 400 100" preserveAspectRatio="none" fill="none">
+      <rect x="30" y="30" width="18" height="70" rx="1" fill="rgba(30,186,143,0.06)"/>
+      <rect x="55" y="50" width="14" height="50" rx="1" fill="rgba(30,186,143,0.04)"/>
+      <rect x="80" y="15" width="12" height="85" rx="1" fill="rgba(30,186,143,0.07)"/>
+      <rect x="100" y="40" width="20" height="60" rx="1" fill="rgba(30,186,143,0.05)"/>
+      <rect x="130" y="8" width="10" height="92" rx="1" fill="rgba(30,186,143,0.08)"/>
+      <rect x="148" y="25" width="22" height="75" rx="1" fill="rgba(30,186,143,0.06)"/>
+      <rect x="178" y="0" width="14" height="100" rx="1" fill="rgba(30,186,143,0.09)"/>
+      <rect x="200" y="35" width="18" height="65" rx="1" fill="rgba(30,186,143,0.05)"/>
+      <rect x="226" y="20" width="12" height="80" rx="1" fill="rgba(30,186,143,0.07)"/>
+      <rect x="246" y="45" width="20" height="55" rx="1" fill="rgba(30,186,143,0.04)"/>
+      <rect x="275" y="12" width="10" height="88" rx="1" fill="rgba(30,186,143,0.08)"/>
+      <rect x="295" y="30" width="16" height="70" rx="1" fill="rgba(30,186,143,0.06)"/>
+      <rect x="320" y="5" width="12" height="95" rx="1" fill="rgba(30,186,143,0.09)"/>
+      <rect x="340" y="42" width="22" height="58" rx="1" fill="rgba(30,186,143,0.05)"/>
+      <rect x="370" y="28" width="14" height="72" rx="1" fill="rgba(30,186,143,0.07)"/>
+    </svg>
+    <div class="skyline-glow"></div>
+  </div>
+
+  <div class="stat-grid">
+    <div class="stat-card r rd1"><div class="n">13K</div><div class="u">restaurants in Dubai</div></div>
+    <div class="stat-card r rd2"><div class="n">4/day</div><div class="u">new concepts opening</div></div>
+    <div class="stat-card stat-card--warn r rd3"><div class="n">33%</div><div class="u">annual staff turnover</div></div>
+    <div class="stat-card stat-card--warn r rd4"><div class="n">45%</div><div class="u">summer footfall drop</div></div>
+  </div>
+</section>
+
+<!-- ═══════════ 4. THE QUESTION ═══════════ -->
+<section class="s question" data-s>
+  <p class="q-line r">Posting content and acquiring customers are <span class="q-big">two completely different problems.</span></p>
+  <div class="divider r rd1"></div>
+  <p class="q-sub r rd2">Most operators solve the wrong one. What's your system for building customer relationships <em>you actually own?</em></p>
+</section>
+
+<!-- ═══════════ 5. SOLUTION + FOUNDER ═══════════ -->
+<section class="s solution" data-s>
+  <p class="label label--v r">The solution</p>
+  <p class="body-text r rd1">Take the content you already have and plug it into a system that generates <strong>direct customer relationships.</strong> Not followers. Not impressions. People reaching out to your brand.</p>
+
+  <div class="founder r rd2">
+    <div class="founder-top">
+      <div class="founder-av">AS</div>
+      <div class="founder-meta">
+        <div class="fn">Asad Shah</div>
+        <div class="fr">Founder, Huddle Duck</div>
+      </div>
+    </div>
+    <div class="cred-list">
+      <div class="cred-item">Meta-certified. Exclusively food businesses.</div>
+      <div class="cred-item">100M+ AED in revenue generated for clients from one system</div>
+      <div class="cred-item">Dentists, coaches, e-commerce, tech? We say no. Every time.</div>
+      <div class="cred-item">Helped an 8-figure F&B brand generate queues around the corner for the first time in their history</div>
+      <div class="cred-item">Franchise brands tripling locations in a single period</div>
+      <div class="cred-item">UAE client paid a full year upfront after just one month</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 6. DM GROWTH ENGINE ═══════════ -->
+<section class="s engine" data-s>
+  <div class="engine-badge r">⚙ The System</div>
+  <h2 class="r rd1">The <span>DM Growth Engine</span></h2>
+  <p class="engine-sub r rd2">A paid traffic system installed across your brand that generates inbound messages from real customers.</p>
+
+  <div class="flow r rd3">
+    <div class="flow-node flow-node--content">📱 Your existing content</div>
+    <div class="flow-arrow"></div>
+    <div class="flow-node flow-node--engine">⚡ DM Growth Engine</div>
+    <div class="flow-arrow"></div>
+    <div class="flow-node flow-node--output">💬 Customers in your DMs</div>
+  </div>
+</section>
+
+<!-- ═══════════ 7. PILLAR 1 ═══════════ -->
+<section class="s pillar" data-s>
+  <div class="pillar-num-bg">01</div>
+  <div class="pillar-icon pi--1 r">🧬</div>
+  <h3 class="r rd1">Frankenstein Creative Engine</h3>
+  <p class="body-text r rd2" style="margin-top:12px">Your content, remixed. New hooks, voiceovers, angles. Dozens of variations built to convert.</p>
+
+  <div class="remix-graphic r rd3">
+    <div class="remix-source">📱</div>
+    <div class="remix-arrow-zone">
+      <div class="remix-arrow-line" style="transform:rotate(-15deg);margin-bottom:8px"></div>
+      <div class="remix-arrow-line"></div>
+      <div class="remix-arrow-line" style="transform:rotate(15deg);margin-top:8px"></div>
+    </div>
+    <div class="remix-outputs">
+      <div class="remix-out">Hook A</div>
+      <div class="remix-out">Hook B</div>
+      <div class="remix-out">Hook C</div>
+      <div class="remix-out">Hook D</div>
+    </div>
+  </div>
+
+  <div class="feat-stack r rd4">
+    <div class="feat"><div class="feat-ic">📱</div><div class="feat-tx"><strong>No filming days</strong>We use what you've already got</div></div>
+    <div class="feat"><div class="feat-ic">🔬</div><div class="feat-tx"><strong>Dozens of variations</strong>Data decides the winners</div></div>
+    <div class="feat"><div class="feat-ic">⚡</div><div class="feat-tx"><strong>Zero production costs</strong>No crews, no studios</div></div>
+  </div>
+</section>
+
+<!-- ═══════════ 8. PILLAR 2 ═══════════ -->
+<section class="s pillar" data-s>
+  <div class="pillar-num-bg">02</div>
+  <div class="pillar-icon pi--2 r">🎯</div>
+  <h3 class="r rd1">Paid Traffic Control</h3>
+  <p class="body-text r rd2" style="margin-top:12px">Right people. Right time. Specific radius around each outlet.</p>
+
+  <div class="radar-wrap r rd3">
+    <div class="radar-ring radar-ring--3"></div>
+    <div class="radar-ring radar-ring--2"></div>
+    <div class="radar-ring radar-ring--1"></div>
+    <div class="radar-center"></div>
+    <div class="radar-dot"></div>
+    <div class="radar-dot"></div>
+    <div class="radar-dot"></div>
+    <div class="radar-dot"></div>
+  </div>
+  <p class="radar-label r rd3">Location-specific campaigns per outlet</p>
+
+  <div class="feat-stack r rd4" style="margin-top:20px">
+    <div class="feat"><div class="feat-ic">📍</div><div class="feat-tx"><strong>New location in JLT?</strong>Saturate JLT before day one</div></div>
+    <div class="feat"><div class="feat-ic">📅</div><div class="feat-tx"><strong>Slow Tuesday in Marina?</strong>Push midweek offers within 3km</div></div>
+  </div>
+</section>
+
+<!-- ═══════════ 9. PILLAR 3 ═══════════ -->
+<section class="s pillar" data-s>
+  <div class="pillar-num-bg">03</div>
+  <div class="pillar-icon pi--3 r">💬</div>
+  <h3 class="r rd1">Conversion Mechanism</h3>
+  <p class="body-text r rd2" style="margin-top:12px">They see your ad. They land in your DMs. Automated flows guide them to book, visit, or enquire.</p>
+
+  <div class="phone-mock r rd3">
+    <div class="phone-frame">
+      <div class="phone-notch"></div>
+      <div class="phone-header">
+        <div class="phone-header-av">🍔</div>
+        <div>
+          <div class="phone-header-name">Your Brand</div>
+          <div class="phone-header-sub">Active now</div>
+        </div>
+      </div>
+      <div class="dm-msgs">
+        <div class="dm-msg dm-msg--them">Hey! I saw your ad, that burger deal looks amazing 🔥</div>
+        <div class="dm-msg dm-msg--you">Thanks! Want me to save you a table tonight? 🙌</div>
+        <div class="dm-msg dm-msg--them">Yes please! For 2, around 7pm?</div>
+        <div class="dm-msg dm-msg--you">Done! You're booked. See you at 7 ✅</div>
+      </div>
+      <div class="phone-input">
+        <div class="phone-input-field">Message...</div>
+        <div class="phone-input-send">→</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="compare r rd4">
+    <div class="cmp cmp--bad">
+      <div class="cmp-label">Aggregator model</div>
+      <ul>
+        <li>Customer belongs to the platform</li>
+        <li>30-40% commission per order</li>
+        <li>No data, no retargeting</li>
+        <li>Brand invisible after delivery</li>
+      </ul>
+    </div>
+    <div class="cmp cmp--good">
+      <div class="cmp-label">DM Growth Engine</div>
+      <ul>
+        <li>Customer belongs to you</li>
+        <li>Message them again any time</li>
+        <li>Your data, your relationship</li>
+        <li>Direct bookings and walk-ins</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 10. PROOF ═══════════ -->
+<section class="s proof" data-s>
+  <p class="label label--s r">Results</p>
+  <h2 class="r rd1">Different brands. Same system. Same outcome.</h2>
+
+  <div class="cases">
+    <div class="case case--uae r rd2">
+      <div class="case-tag">🇦🇪 UAE Confidential</div>
+      <div class="case-brand">Biggest launch in company history</div>
+      <div class="case-stats">
+        <div class="cs"><div class="big">12mo</div><div class="sm">Paid upfront after 1 month</div></div>
+      </div>
+      <p class="case-note">People driving hours to visit. Trust so high they paid a full year upfront.</p>
+    </div>
+
+    <div class="case case--sk r">
+      <div class="case-tag">🇬🇧 Shakedown</div>
+      <div class="case-brand">Gourmet Burgers</div>
+      <div class="case-stats">
+        <div class="cs"><div class="big">1→5</div><div class="sm">Locations</div></div>
+        <div class="cs"><div class="big">4K+</div><div class="sm">Showed up Newcastle</div></div>
+      </div>
+      <p class="case-note">600 clicks in hours. Queue on day one. Every location.</p>
+    </div>
+
+    <div class="case case--dc r">
+      <div class="case-tag">🇬🇧 Dough Club</div>
+      <div class="case-brand">Detroit-Style Pizza</div>
+      <div class="case-stats">
+        <div class="cs"><div class="big">12K+</div><div class="sm">Followers pre-launch</div></div>
+        <div class="cs"><div class="big">3</div><div class="sm">Locations in months</div></div>
+      </div>
+      <p class="case-note">Sold out for weeks. Queue on day one. Every time.</p>
+    </div>
+
+    <div class="case case--bs r">
+      <div class="case-tag">🇬🇧 Burger & Sauce</div>
+      <div class="case-brand">Quick-Service Burgers</div>
+      <div class="case-stats">
+        <div class="cs"><div class="big">7,000%</div><div class="sm">ROI</div></div>
+        <div class="cs"><div class="big">8 days</div><div class="sm">To results</div></div>
+      </div>
+    </div>
+
+    <div class="case case--cg r">
+      <div class="case-tag">🇬🇧 Chai Green</div>
+      <div class="case-brand">Chai & Desserts</div>
+      <div class="case-stats">
+        <div class="cs"><div class="big">3×</div><div class="sm">Franchise locations</div></div>
+        <div class="cs"><div class="big">1M+</div><div class="sm">Views per reel</div></div>
+      </div>
+      <p class="case-note">"The most explosive growth in nearly a decade."</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 11. OUTCOMES ═══════════ -->
+<section class="s--half outcomes" data-s>
+  <h3 class="r">Queues. Bookings. Franchise leads. Customers who come to you.</h3>
+  <div class="pills r rd1">
+    <div class="pill">Walk-ins</div>
+    <div class="pill">Bookings</div>
+    <div class="pill">DMs</div>
+    <div class="pill">Franchise leads</div>
+  </div>
+</section>
+
+<!-- ═══════════ 12. OFFER ═══════════ -->
+<section class="s offer" data-s>
+  <p class="label label--v r">What you get</p>
+  <h2 class="r rd1">Full DM Growth Engine. Everything handled.</h2>
+
+  <div class="offer-list r rd2">
+    <div class="ol-item"><span class="ol-chk">✓</span>Customer avatar research per location</div>
+    <div class="ol-item"><span class="ol-chk">✓</span>Ad copy and voiceover scripts</div>
+    <div class="ol-item"><span class="ol-chk">✓</span>Video ads from your existing content</div>
+    <div class="ol-item"><span class="ol-chk">✓</span>Campaign setup and launch on Meta</div>
+    <div class="ol-item"><span class="ol-chk">✓</span>Weekly optimisation</div>
+    <div class="ol-item"><span class="ol-chk">✓</span>DM automation flows</div>
+    <div class="ol-item"><span class="ol-chk">✓</span>Conversation scripts for your team</div>
+    <div class="ol-item"><span class="ol-chk">✓</span>Ongoing creative refresh</div>
+  </div>
+</section>
+
+<!-- ═══════════ 13. GUARANTEE ═══════════ -->
+<section class="s--half guarantee" data-s>
+  <div class="shield r">
+    <div class="shield-outer"><div class="shield-inner"><div class="shield-text">90<span>DAYS</span></div></div></div>
+  </div>
+  <h3 class="r rd1">Beat your current CPA in <em>90 days</em> or we work free until we do.</h3>
+  <p class="body-text r rd2" style="margin-top:12px">We take the risk. You get the results.</p>
+</section>
+
+<!-- ═══════════ 14. OBJECTIONS ═══════════ -->
+<section class="s objections" data-s>
+  <p class="label label--g r">You might be thinking...</p>
+  <div class="obj-stack r rd1">
+    <div class="obj-card">
+      <div class="obj-q" onclick="tog(this)">"You're UK-based. You don't get Dubai."</div>
+      <div class="obj-a"><p>The DM Growth Engine works because it's built on human psychology, not geography. We've already deployed in the UAE and the results were the strongest we've ever seen. We research your specific customer avatar before we create a single ad.</p></div>
+    </div>
+    <div class="obj-card">
+      <div class="obj-q" onclick="tog(this)">"I've tried ads. They didn't work."</div>
+      <div class="obj-a"><p>Most agencies run brand awareness campaigns. We run conversion campaigns with a built-in mechanism to turn views into customers. That's why our clients see queues, not likes.</p></div>
+    </div>
+    <div class="obj-card">
+      <div class="obj-q" onclick="tog(this)">"My franchise partners won't buy in."</div>
+      <div class="obj-a"><p>They will when they see the results at your flagship locations first. Start with company-owned outlets, prove the system, then roll it out to franchisees with data they can't argue with.</p></div>
+    </div>
+    <div class="obj-card">
+      <div class="obj-q" onclick="tog(this)">"Why join a waitlist? Just let me book when you're ready."</div>
+      <div class="obj-a"><p>Because when we open spots, they go to the waitlist first. We can only onboard one or two new clients at a time because of how hands-on the delivery is. If you're not on the list, you're starting from the back of the queue. Joining takes thirty seconds and costs you nothing.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 15. CTA ═══════════ -->
+<section class="s cta" data-s>
+  <div class="cta-capacity r">
+    <div class="cap-dot"></div>
+    <span>Currently at capacity</span>
+  </div>
+  <h2 class="r rd1">Be first in line when we <span>open spots.</span></h2>
+  <p class="cta-sub r rd2">Every client gets a fully hands-on, bespoke buildout. We won't compromise that by taking on more than we can deliver.</p>
+
+  <div class="waitlist-card r rd3">
+    <div class="wl-slots">
+      <div class="wl-slot wl-slot--filled"><span>●</span> Filled</div>
+      <div class="wl-slot wl-slot--filled"><span>●</span> Filled</div>
+      <div class="wl-slot wl-slot--open"><span>◯</span> Opening soon</div>
+    </div>
+    <p class="wl-note">1-2 spots for UAE operators in the coming weeks</p>
+  </div>
+
+  <a href="#" class="cta-btn r rd3">Join the Waitlist →</a>
+  <p class="cta-urg r rd4">No commitment. No credit card. Just your name and your brand.</p>
+  <div class="cta-speed r rd4">⚡ 30 seconds to secure your place</div>
+  <p class="cta-urgency-line r rd5">Every week without a system is another week paying aggregator commissions on customers who should be coming to you directly.</p>
+  <p class="cta-yalla r rd5">Yalla. Let's talk.</p>
+</section>
+
+<footer class="foot">
+  <div class="foot-name">Huddle Duck</div>
+  <div class="foot-sub">Paid advertising exclusively for multi-location F&B.</div>
+</footer>
+
+<script>
+// Reveal on scroll
+const rr=document.querySelectorAll('.r');
+const io=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('v')})},{threshold:.12,rootMargin:'0px 0px -30px 0px'});
+rr.forEach(x=>io.observe(x));
+
+// Nav dots
+const ss=document.querySelectorAll('[data-s]');
+const dc=document.getElementById('dots');
+ss.forEach(()=>{const d=document.createElement('b');dc.appendChild(d)});
+const dots=dc.querySelectorAll('b');
+dots.forEach((d,i)=>d.onclick=()=>ss[i].scrollIntoView({behavior:'smooth'}));
+const dio=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting){const i=[...ss].indexOf(x.target);dots.forEach((d,j)=>d.classList.toggle('on',j===i))}})},{threshold:.35});
+ss.forEach(s=>dio.observe(s));
+
+// Objection toggle
+function tog(el){
+  const a=el.nextElementSibling,o=el.classList.contains('on');
+  document.querySelectorAll('.obj-q').forEach(q=>q.classList.remove('on'));
+  document.querySelectorAll('.obj-a').forEach(a=>a.classList.remove('on'));
+  if(!o){el.classList.add('on');a.classList.add('on')}
+}
+
+// Hide scroll cue
+let sc=false;
+window.addEventListener('scroll',()=>{if(!sc&&scrollY>80){sc=true;const c=document.querySelector('.scroll-cue');if(c)c.style.opacity='0'}},{passive:true});
+</script>
+
+</body>
+</html>
